@@ -1,8 +1,24 @@
 version: '3'
 
 services:
+  spring-boot-docker:
+    image: springframeworkguru/springbootdocker
+    ports:
+      - '8080:8080'
+    restart: always
+    depends_on:
+      - mysqldb
+      - pageviewservice
+    environment:
+      SPRING_RABBITMQ_HOST: rabbitmq
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+
   mysqldb:
-    image: mysql
+    image: mysql:5.7
     restart: always
     ports:
       - '3306:3306'
